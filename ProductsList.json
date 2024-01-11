@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "title": "Notebook Compaq",
+    "description": "Suitable",
+    "price": 150,
+    "thumbnail": "thumbnail1.jpg",
+    "code": "001"
+  },
+  {
+    "id": 2,
+    "title": "Notebook Toshiba",
+    "description": "Outdated",
+    "price": 300,
+    "thumbnail": "updatedThumbnail.jpg",
+    "code": "002"
+  }
+]

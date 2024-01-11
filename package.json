@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "nodemon": "^3.0.2",
+    "yarn": "^1.22.21"
+  },
+  "name": "backproject",
+  "version": "1.0.0",
+  "description": "\"CoderHouse Project\"",
+  "main": "ProductManagerMarotti.js",
+  "scripts": {
+    "start": "nodemon ProductManagerMarotti.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Marotti",
+  "license": "ISC"
+}
