@@ -9,10 +9,18 @@
   },
   {
     "id": 2,
-    "title": "Notebook Toshiba",
-    "description": "Outdated",
-    "price": 300,
-    "thumbnail": "updatedThumbnail.jpg",
+    "title": "Notebook Asus",
+    "description": "Modern",
+    "price": 250,
+    "thumbnail": "thumbnail2.jpg",
     "code": "002"
+  },
+  {
+    "id": 3,
+    "title": "Notebook HP",
+    "description": "Cool",
+    "price": 300,
+    "thumbnail": "thumbnail3.jpg",
+    "code": "003"
   }
 ]
