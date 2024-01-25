@@ -1,5 +1,6 @@
 const fs = require("fs");
 const { title } = require("process");
+
 //Class and methods
 class ProductManager{
     constructor(){
@@ -7,7 +8,7 @@ class ProductManager{
             this.productIDCounter= 1;
     }
     
-    async addProduct(title, description, price, thumbnail, code){
+    async addProduct(title, description, category, price, thumbnail, code, status, stock ){
         if(this.products.some(product => product.code === code)){
             console.log(`This code: ${code} already exists in the array`)
             return 
@@ -16,13 +17,16 @@ class ProductManager{
             id: this.productIDCounter++,
             title,
             description,
+            category,
             price,
             thumbnail,
-            code
+            code,
+            status,
+            stock
         }
         this.products.push(newProduct)
         try{
-            fs.promises.writeFile("ProductsList.json", JSON.stringify(this.products , null, 2), "utf-8");
+            fs.promises.writeFile("./src/json/ProductsList.json", JSON.stringify(this.products , null, 2), "utf-8");
             console.log("Product added successfully.");
         }catch(error){
             console.error("Error writing to file:", error);
@@ -30,7 +34,7 @@ class ProductManager{
     }
     async getProducts(limit){
         try{
-            const fileContet = await fs.promises.readFile("ProductsList.json", "utf-8")
+            const fileContet = await fs.promises.readFile("./src/json/ProductsList.json", "utf-8")
             const parsedProducts = JSON.parse(fileContet)
             if(this.products.length === 0) {
                 console.log("No items were found")
@@ -43,7 +47,7 @@ class ProductManager{
     }
     async getProductById(id){
         try{
-            const fileContent = await fs.promises.readFile("ProductsList.json", "utf-8")
+            const fileContent = await fs.promises.readFile("./src/json/ProductsList.json", "utf-8")
             const parsedProducts = JSON.parse(fileContent)
             const productFound = parsedProducts.find(product =>product.id.toString() === id)
             if(!productFound){
@@ -56,20 +60,24 @@ class ProductManager{
             console.error("Error while reading the Id:" , error)
         }
     }
-    async updateProduct(id, updatedTitle, updatedDescription, updatedPrice, updatedThumbnail ){
+    async updateProduct(id, updatedTitle, updatedDescription, updatedCategory, updatedPrice, updatedThumbnail, updatedCode, updatedStatus, updatedStock ){
         try{
-            const fileContet = await fs.promises.readFile("ProductsList.json", "utf-8")
+            const fileContet = await fs.promises.readFile("./src/json/ProductsList.json", "utf-8")
             const parsedProducts = JSON.parse(fileContet)
-            const productIndex = parsedProducts.findIndex(product =>product.id === id)
+            const productIndex = parsedProducts.findIndex(product =>product.id == id)
             if(productIndex === -1){
                 console.log(`Product with id: ${id} not found. `)
             }
                 // Update the properties of the found product
             parsedProducts[productIndex].title = updatedTitle;
             parsedProducts[productIndex].description = updatedDescription;
+            parsedProducts[productIndex].category = updatedCategory;
             parsedProducts[productIndex].price = updatedPrice;
             parsedProducts[productIndex].thumbnail = updatedThumbnail;
-            await fs.promises.writeFile("ProductsList.json", JSON.stringify(parsedProducts, null, 2), "utf-8")
+            parsedProducts[productIndex].code = updatedCode;
+            parsedProducts[productIndex].status = updatedStatus;
+            parsedProducts[productIndex].stock = updatedStock;
+            await fs.promises.writeFile("./src/json/ProductsList.json", JSON.stringify(parsedProducts, null, 2), "utf-8")
             console.log(`Product with id ${id} updated successfully:`)
             return parsedProducts[productIndex]
         }catch(error){
@@ -78,10 +86,10 @@ class ProductManager{
     }
     async deleteProduct(id){
         try{
-            const fileContet = await fs.promises.readFile("ProductsList.json", "utf-8")
+            const fileContet = await fs.promises.readFile("./src/json/ProductsList.json", "utf-8")
             const parsedProducts = JSON.parse(fileContet)
             const deletedProduct = parsedProducts.filter(product =>product.id !== id) //Creating a new array without the product 
-            await fs.promises.writeFile("ProductsList.json", JSON.stringify(deletedProduct, null, 2), "utf-8")
+            await fs.promises.writeFile("./src/json/ProductsList.json", JSON.stringify(deletedProduct, null, 2), "utf-8")
             console.log(`Product with id ${id} deleted successfully.`);
         }catch(error){
             console.error(`An error occured while deleting product with ${id}: ` , error)
@@ -101,10 +109,9 @@ class ProductManager{
 async function executePrompts() {
     const productManager = ProductManager.instance;
 
-    await productManager.addProduct("Notebook Compaq", "Suitable", 150, "thumbnail1.jpg", "001");
-    await productManager.addProduct("Notebook Asus", "Modern", 250, "thumbnail2.jpg", "002");
-    await productManager.addProduct("Notebook HP", "Cool", 300, "thumbnail3.jpg", "003");
-    // await productManager.addProduct("Same Code", "Modern", 250, "thumbnail2.jpg", "002");
+    await productManager.addProduct("Notebook Compaq", "Suitable", "Notebook",150, "thumbnail1.jpg", "001", true, 50);
+    await productManager.addProduct("Notebook Asus", "Modern", "Notebook", 250, "thumbnail2.jpg", "002", true, 70);
+    await productManager.addProduct("Notebook HP", "Cool", "Notebook", 300, "thumbnail3.jpg", "003", true, 30);
 
     // const allProducts = await productManager.getProducts();
     // console.log(allProducts);
@@ -118,8 +125,8 @@ async function executePrompts() {
     // console.error(productById2);
     // await productManager.deleteProduct(3)
 
-    const updatedProducts = await productManager.getProducts();
-    console.log("Here is the list of the updated products:" , updatedProducts);
+    // const updatedProducts = await productManager.getProducts();
+    // console.log("Here is the list of the updated products:" , updatedProducts);
 }
 
 executePrompts();

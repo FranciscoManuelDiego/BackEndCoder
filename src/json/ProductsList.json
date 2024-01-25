@@ -3,24 +3,33 @@
     "id": 1,
     "title": "Notebook Compaq",
     "description": "Suitable",
+    "category": "Notebook",
     "price": 150,
     "thumbnail": "thumbnail1.jpg",
-    "code": "001"
+    "code": "001",
+    "status": true,
+    "stock": 50
   },
   {
     "id": 2,
     "title": "Notebook Asus",
     "description": "Modern",
+    "category": "Notebook",
     "price": 250,
     "thumbnail": "thumbnail2.jpg",
-    "code": "002"
+    "code": "002",
+    "status": true,
+    "stock": 70
   },
   {
     "id": 3,
     "title": "Notebook HP",
     "description": "Cool",
+    "category": "Notebook",
     "price": 300,
     "thumbnail": "thumbnail3.jpg",
-    "code": "003"
+    "code": "003",
+    "status": true,
+    "stock": 30
   }
 ]
