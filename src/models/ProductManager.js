@@ -1,5 +1,4 @@
 const fs = require("fs");
-const { title } = require("process");
 
 //Class and methods
 class ProductManager{
