@@ -1,0 +1,11 @@
+<h2 class=" text-xl text-gray-light text-center mt-2">Cards will be displayed here.</h2>
+{{!-- Adding the partial --}}
+<div class="flex justify-center">
+{{#each productList}}
+    {{> cards}}
+{{/each}}
+</div>
+<p class="text-center mt-2"><a class=" text-xl text-gray-light" href="./">Return to Home</a></p>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.min.js"></script>
+{{!-- It works because I should not add the public, it's already done with the static route. --}}
+<script src="./js/main.js"></script>

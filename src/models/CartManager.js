@@ -20,7 +20,7 @@ class CartManager {
             console.error("Error while creating a new cart:", error);
         }
     }
-    async addToCart(cartId, productId, quantity) {
+    async addToCart(cartId, productId, title, quantity) {
         try {
             const productsToLoad = await this.loadProducts(); // Load the JSON products file
             const product = productsToLoad.find((product) => parseInt(product.id) === parseInt(productId)); // Finding a product with the given ID
@@ -37,13 +37,16 @@ class CartManager {
     
                     // If it does exist, update the quantity of the items
                     if (existingCartItemIndex !== -1) {
-                        this.cart[existingCartIndex].items[existingCartItemIndex].quantity =
-                            (this.cart[existingCartIndex].items[existingCartItemIndex].quantity || 0) + parseInt(quantity);
+                        // If it does exist, update the quantity of the items
+                        const existingQuantity = this.cart[existingCartIndex].items[existingCartItemIndex].quantity || 0;
+                        this.cart[existingCartIndex].items[existingCartItemIndex].quantity = existingQuantity + parseInt(quantity);
                     } else {
+                        const newQuantity = parseInt(quantity) || 0; // Ensure quantity is a valid number, default to 0
                         // If it doesn't exist, add the product to the cart
                         this.cart[existingCartIndex].items.push({
                             productId: parseInt(productId),
-                            quantity: parseInt(quantity),
+                            title: product.title, // Include the product title
+                            quantity: newQuantity,
                         });
                     }
                 } else {
@@ -54,11 +57,11 @@ class CartManager {
                         items: [
                             {
                                 productId: parseInt(productId),
+                                title: product.title, // Include the product title
                                 quantity: parseInt(quantity),
                             },
                         ],
                     };
-    
                     this.cart.push(newCart);
                 }
     
@@ -73,17 +76,22 @@ class CartManager {
     }
     
 
-    async getCart(){
-        try{
-            const fileContet = await fs.promises.readFile("./src/json/Cart.json", "utf-8")
-            const parsedCart = JSON.parse(fileContet)
-            if(parsedCart === 0) {
-                console.log("No items in the cart were found")
+    async getCart(cartId) {
+        try {
+            const fileContent = await fs.promises.readFile("./src/json/Cart.json", "utf-8");
+            const parsedCart = JSON.parse(fileContent);
+    
+            if (!cartId) {
+                // If cartId is not provided, return the entire cart
+                return parsedCart;
             } else {
-                return parsedCart
+                // If cartId is provided, find and return the specific cart
+                const cart = parsedCart.find((cart) => cart.cartId === parseInt(cartId));
+                return cart || { items: [] }; // Return an empty cart if not found
             }
-        }catch(error){
-            console.error("Error while reading the file:" , error)
+        } catch (error) {
+            console.error("Error while reading the file:", error);
+            return { items: [] }; // Return an empty cart in case of error
         }
     }
     async saveCartToFile() {
@@ -101,8 +109,8 @@ class CartManager {
             const fileContent = await fs.promises.readFile("./src/json/ProductsList.json", "utf-8");
             const products = JSON.parse(fileContent);
             
-            // Extract and return only the product IDs
-            return products.map(product => product.id);
+            // Extract and return the product IDs and Titles
+            return products.map(product => product.id.title);
         } catch (error) {
             console.error("Error while loading product IDs:", error);
             return [];

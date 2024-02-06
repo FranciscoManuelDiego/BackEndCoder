@@ -26,7 +26,7 @@ class ProductManager{
         this.products.push(newProduct)
         try{
             fs.promises.writeFile("./src/json/ProductsList.json", JSON.stringify(this.products , null, 2), "utf-8");
-            console.log("Product added successfully.");
+            // console.log("Product added successfully."); // This is optional to view the added product on console.log
         }catch(error){
             console.error("Error writing to file:", error);
         }

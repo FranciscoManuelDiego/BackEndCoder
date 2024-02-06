@@ -3,7 +3,8 @@
     "cartId": 1,
     "items": [
       {
-        "productId": 1,
+        "productId": 3,
+        "title": "Notebook HP",
         "quantity": null
       }
     ]
