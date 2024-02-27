@@ -1,0 +1,15 @@
+<h2 class=" text-xl text-gray-light text-center mt-2">Chat Example</h2>
+        <form class="flex flex-col text-center m-auto max-w-sm mx-auto" id="chatForm">
+            <label for="message" class="block mt-2 mb-2  text-gray-light">Leave your message here.</label>
+            <input type="text" id="messageInput" placeholder="Type your message"
+            class=" text-center appearance-none bg-gray-dark rounded-sm w-full text-gray mr-3 py-1 px-2"></input>
+                <button class="relative lg:py-2 lg:px-4 md:py-2 md:px-1 bg-blue text-white rounded 
+                    disabled:opacity-50 mt-4 lg:w-full md:w-40 " type="submit">Send</button>
+        </form>
+<h3 class=" text-xl text-gray-light text-center mt-10 m-2">Messages wil be displayed here:</h3>
+<ul class="text-gray-light text-center m-2" id="messageList">
+    <!-- Messages will be displayed here -->
+</ul>
+<p class="text-center mt-4"><a class=" text-xl text-gray-light mt-10" href="./">Return to Home</a></p>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.min.js"></script>
+<script src="./js/chat.js"></script>

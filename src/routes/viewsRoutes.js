@@ -14,5 +14,13 @@ router.get("/realtimeproducts", (req, res) => {
         res.status(500).send("Internal Server Error")
     }
 });
+router.get("/chats", (req, res) => {
+    try {
+        res.render("chats", { title: "Test BackEnd Chats"})
+    } catch (error) {
+        console.error("Error rendering chats view:", error)
+        res.status(500).send("Internal Server Error")
+    }
+});
 
 module.exports = router;

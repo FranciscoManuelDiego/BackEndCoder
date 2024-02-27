@@ -31,7 +31,10 @@ module.exports = {
       },
       borderRadius: {
         '4xl': '2rem',
-      }
+      },
+      title: {
+        'h2': 'text-xl text-gray-light text-center mt-2',
+      } 
     }
   },
 }
