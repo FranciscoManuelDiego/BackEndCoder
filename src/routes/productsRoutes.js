@@ -85,8 +85,10 @@ const router = express.Router();
 // Get users in DB
 router.get("/" , async (req,  res ) => {
     try{
-        const products = await Product.find()
-        res.status(201).json(products)
+        const page = parseInt(req.query.page) || 1; //Setting manually the limits
+        const limit = parseInt(req.query.limit) || 10; //Setting manually the limits
+        const products = await Product.paginate({}, { page, limit });
+        res.status(201).json(products);
     }catch(err){
         console.error(`Error while getting products: ${err}`)
         res.status(500).send("Internal server Error")
