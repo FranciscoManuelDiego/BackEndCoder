@@ -9,7 +9,7 @@ const socket = require("socket.io")
 const mongoose = require("mongoose")
 const dotenv = require("dotenv")
 const app = express();
-const exphbs = require("express-handlebars");
+const handlebars = require(".././public/js/handlebarsConfig.js")
 const PORT = 4000;
 
 // Using the method to parse the config
@@ -23,7 +23,7 @@ app.use(express.json());
 //Static Resource for the HTML
 app.use(express.static("public"))
 // HBS config and view of it is HBS with its views
-app.engine("handlebars", exphbs.engine())
+app.engine("handlebars", handlebars.engine)
 app.set("view engine", "handlebars")
 app.set("views", "./src/views")
 

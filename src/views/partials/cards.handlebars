@@ -2,21 +2,21 @@
     <img class="object-cover rounded-tl-lg rounded-tr-lg md:rounded-tr-sm"
         src="https://www.kindacode.com/wp-content/uploads/2022/06/computer-example.jpg" />
         <div class="px-5 py-3 space-y-2">
-            <h3 class="lg:text-lg  md:text-sm">{{tittle}}</h3>
+            <h3 class="lg:text-lg  md:text-sm">{{getProperty this 'title'}}</h3>
             <div class="space-x-2">
                 <span class="px-3 py-0.5 border border-blue-500 text-[11px] text-blue md:text-[9px]">Free Ship</span>
                 <span class="px-3 py-0.5 border border-blue-500 text-[11px] text-blue md:text-[9px]]">7 Day Return</span>
             </div>
             <p class="space-x-2">
-                <p class="lg:text-2xl md:text-sm">Price: {{this.price}} $</p>
+                <p class="lg:text-2xl md:text-sm">Price: {{getProperty this 'price'}} $</p>
                 <span class="text-lg text-red-700">15% off</span>
-                <p class="lg">{{description}}</p>
+                <p class="lg">{{getProperty this 'description'}}</p>
             </p>
             <button class="lg:py-2 lg:px-4 md:py-2 md:px-1 bg-blue text-white rounded 
             disabled:opacity-50 mt-4 lg:w-full md:w-40
             addToCartBtn"
-            data-product-id="{{productId}}"
-            data-title="{{title}}"
+            data-product-id="{{getProperty this 'productId'}}"
+            data-title="{{getProperty this 'title'}}"
             >Add to Cart</button>
             {{!-- Adding the product to the cart!  --}}
         </div>
