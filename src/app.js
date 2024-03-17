@@ -1,4 +1,7 @@
 const express = require("express");
+const session = require("express-session");
+const cookieParser = require("cookie-parser");
+const MongoStore = require("connect-mongo");
 const productsRoutes = require("./routes/productsRoutes.js");
 const cartRoutes = require("./routes/cartRoutes.js");
 const usersRoutes = require("./routes/usersRoutes.js")
@@ -8,6 +11,8 @@ const Msg = require("./models/MongoModels/Chats");
 const socket = require("socket.io")
 const mongoose = require("mongoose")
 const dotenv = require("dotenv")
+const initializePassport = require("./config/passportconfig.js");
+const passport = require("passport")
 const app = express();
 const handlebars = require(".././public/js/handlebarsConfig.js")
 const PORT = 4000;
@@ -27,16 +32,33 @@ app.engine("handlebars", handlebars.engine)
 app.set("view engine", "handlebars")
 app.set("views", "./src/views")
 
+// Adding CookieParser Middleware
+app.use(cookieParser());
+
+// Adding Mongoose with MongoStore
+app.use(session({
+    secret:"secretCoder",
+    resave: true, 
+    saveUninitialized:true,   
+    store: MongoStore.create({
+        mongoUrl: process.env.MONGOOSE_CONNECTION, ttl: 100
+    }) 
+}))
+
 // Consuming Routes
 app.use("/api/products", productsRoutes)
 app.use("/api/users", usersRoutes)
 app.use("/api/carts", cartRoutes)
 app.use("/", viewsRoutes)
 
-// Adding Mongoose
-mongoose.connect(process.env.MONGOOSE_CONNECTION)
-.then(() => console.log("Connected to DB😎"))
-.catch((error) => console.log(error))
+// Adding Passport to the app
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
+
+// mongoose.connect(process.env.MONGOOSE_CONNECTION )
+// .then(() => console.log("Connected to DB😎"))
+// .catch((error) => console.log(error))
 
 // Creating an instance of the port
 const httpServer = app.listen(PORT , 

@@ -1,0 +1,25 @@
+    <h1 class="text-xl text-gray-light text-center mt-2">User Carts</h1>
+
+    {{#if carts.length}}
+    {{#each carts}}
+        <h2 class="text-md text-center text-gray-light p-1 m-2">Cart properties</h2>
+        <p class="text-md text-center text-gray-light p-1 m-2">User ID: {{userId}}</p>
+        
+        {{#if products.length}}
+        <ul class="text-center">
+            {{#each products}}
+            <li>
+                <strong class="text-md text-gray-light p-1 m-2">Product ID:  {{getProperty productId '_id'}}</strong><br>
+                <strong class="text-md text-gray-light p-1 m-2">Product Name: {{getProperty productId 'title'}}</strong><br>
+                <strong class="text-md text-gray-light p-1 m-2">Quantity:  {{quantity}}</strong>
+            </li>
+            {{/each}}
+        </ul>
+        {{else}}
+        <p>No products in the cart.</p>
+        {{/if}}
+    {{/each}}
+    {{else}}
+    <p>No carts found.</p>
+    {{/if}}
+    <p class="text-center mt-2"><a class="text-xl text-gray-light" href="./">Return to Home</a></p>

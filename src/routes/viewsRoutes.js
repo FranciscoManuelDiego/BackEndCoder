@@ -1,5 +1,6 @@
 const express = require("express");
 const Product = require("../models/MongoModels/Products")
+const Cart = require("../models/MongoModels/Carts")
 const handlebarsConfig = require("../../public/js/handlebarsConfig")
 const router = express.Router();
 
@@ -54,6 +55,7 @@ router.get('/realtimeproducts', async (req, res) => {
     }
 });
 
+// Chats view.
 router.get("/chats", (req, res) => {
     try {
         res.render("chats", { title: "Test BackEnd Chats"})
@@ -61,6 +63,49 @@ router.get("/chats", (req, res) => {
         console.error("Error rendering chats view:", error)
         res.status(500).send("Internal Server Error")
     }
+});
+
+//Cart view.
+router.get('/viewcart', async (req, res) => {
+    try {
+        // Assuming you retrieve the cart based on the user ID
+        // const userId = req.params.userId;
+        // console.log('User ID from params:', userId);
+        const carts = await Cart.find().populate('products.productId');
+        console.log(carts)
+        // Check if there are carts
+        if (carts.length > 0) {
+            res.render('viewcart', { title: 'User Carts', carts, handlebarsConfig });
+        } else {
+            res.render('viewcart', { title: 'User Carts', carts: null, handlebarsConfig });
+        }
+    } catch (error) {
+        console.error('Error rendering viewcart view:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+// Login and Register view.
+router.get("/register", (req, res) => {
+    if (req.session.login) {
+        return res.redirect("/profile");
+    }
+    res.render("register");
+});
+
+router.get("/login", (req, res) => {
+    if (req.session.login) {
+        return res.redirect("/profile");
+    }
+    res.render("login");
+});
+
+// Profile view
+router.get("/profile", (req, res) => {
+    if (!req.session.login) {
+        return res.redirect("/login");
+    }
+    res.render("profile", { user: req.session.user });
 });
 
 module.exports = router;
