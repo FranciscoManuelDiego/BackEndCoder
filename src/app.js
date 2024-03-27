@@ -9,7 +9,6 @@ const viewsRoutes = require("./routes/viewsRoutes.js");
 const CartManager = require('./models/CartManager');
 const Msg = require("./models/MongoModels/Chats"); 
 const socket = require("socket.io")
-const mongoose = require("mongoose")
 const dotenv = require("dotenv")
 const initializePassport = require("./config/passportconfig.js");
 const passport = require("passport")
@@ -45,20 +44,16 @@ app.use(session({
     }) 
 }))
 
-// Consuming Routes
-app.use("/api/products", productsRoutes)
-app.use("/api/users", usersRoutes)
-app.use("/api/carts", cartRoutes)
-app.use("/", viewsRoutes)
-
 // Adding Passport to the app
 initializePassport();
 app.use(passport.initialize());
 app.use(passport.session());
 
-// mongoose.connect(process.env.MONGOOSE_CONNECTION )
-// .then(() => console.log("Connected to DB😎"))
-// .catch((error) => console.log(error))
+// Consuming Routes
+app.use("/api/products", productsRoutes)
+app.use("/api/users", usersRoutes)
+app.use("/api/carts", cartRoutes)
+app.use("/", viewsRoutes)
 
 // Creating an instance of the port
 const httpServer = app.listen(PORT , 

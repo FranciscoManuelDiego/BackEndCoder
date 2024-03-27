@@ -9,18 +9,18 @@ const LocalStrategy = local.Strategy;
 
 const initializePassport = () => {
     passport.use("register", new LocalStrategy({
-        passReqToCallback: true,
         //Getting the requested object
+        passReqToCallback: true,
         usernameField: "email"
-    }, async (req, email, done) => {
+    }, async (req, username, password, done) => {
         console.log(req.body)
-        const {full_name, password } = req.body;
+        const {full_name, email } = req.body;
 
         try {
-            //Verificamos si ya existe un registro con ese mail
-            let user = await UserModel.findOne({email:email});
+            //Checking if the register exists with that email
+            let user = await UserModel.findOne({email});
             if(user) return done(null, false);
-            //Si no existe, voy a crear un registro nuevo: 
+            //If it doesn't exist, create a new one
             let newUser = {
                 full_name,
                 email,
@@ -28,32 +28,34 @@ const initializePassport = () => {
             }
 
             let result = await UserModel.create(newUser);
-            //Si todo resulta bien, podemos mandar done con el usuario generado. 
+            //If it works, return the result
             return done(null, result);
         } catch (error) {
             return done(error);
         }
     }))
 
-    //Agregamos otra estrategia, ahora para el "login":
+    //Login side
     passport.use("login", new LocalStrategy({
         usernameField: "email"
     }, async (email, password, done) => {
         try {
-            //Primero verifico si existe un usuario con ese email:
+            //Check if the user exists with the email
             const user = await UserModel.findOne({email});
             if(!user) {
                 console.log("This user does not exist");
                 return done(null, false);
             }
-            //Si existe, verifico la contraseña: 
-            if(!isValidPassword(password, user)) return done(null, false);
+            //If it exists , check the password
+            if(!isValidPassword(password, user)){
             return done(null, user);
+            }
         } catch (error) {
             return done(error);
         }
     }))
 
+    // Serializing: Transforming an user object into a chain to store the session
     passport.serializeUser((user, done) => {
         done(null, user._id);
     });
