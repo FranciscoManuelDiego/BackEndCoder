@@ -3,8 +3,6 @@ const router = express.Router();
 const User = require("../models/MongoModels/Users.js")
 const passport = require("passport");
 
-
-
 // Get users in DB
 router.get("/" , async (req,  res ) => {
     try{
@@ -76,7 +74,7 @@ router.post("/", passport.authenticate("register", {failureRedirect: "/failedreg
 })
 
 router.get("/failedregister", (req, res) => {
-    res.send({error: "Registro fallido!"});
+    res.send({error: "Failed register :("});
 })
 
 module.exports = router; 

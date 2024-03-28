@@ -1,12 +1,12 @@
 const express = require("express");
 const session = require("express-session");
+const mongoose = require('mongoose');
 const cookieParser = require("cookie-parser");
 const MongoStore = require("connect-mongo");
 const productsRoutes = require("./routes/productsRoutes.js");
 const cartRoutes = require("./routes/cartRoutes.js");
 const usersRoutes = require("./routes/usersRoutes.js")
 const viewsRoutes = require("./routes/viewsRoutes.js");
-const CartManager = require('./models/CartManager');
 const Msg = require("./models/MongoModels/Chats"); 
 const socket = require("socket.io")
 const dotenv = require("dotenv")
@@ -34,7 +34,20 @@ app.set("views", "./src/views")
 // Adding CookieParser Middleware
 app.use(cookieParser());
 
-// Adding Mongoose with MongoStore
+// Connect to MongoDB using Mongoose
+const connectDB = async () => {
+    try {
+        await mongoose.connect(process.env.MONGOOSE_CONNECTION);
+        console.log('Connected to MongoDB database');
+    } catch (error) {
+        console.error('Error connecting to MongoDB:', error);
+        process.exit(1); // Exit the application on connection error
+    }
+}
+
+connectDB();
+
+// Adding MongoStore connection
 app.use(session({
     secret:"secretCoder",
     resave: true, 
@@ -55,6 +68,11 @@ app.use("/api/users", usersRoutes)
 app.use("/api/carts", cartRoutes)
 app.use("/", viewsRoutes)
 
+app.post("/register", passport.authenticate("register", {
+    successRedirect: "/profile",
+    failureRedirect: "/register",
+    failureFlash: true // Enable flash messages
+}));
 // Creating an instance of the port
 const httpServer = app.listen(PORT , 
     ()=>console.log(`Server running on port: ${PORT}🏃`))
@@ -90,23 +108,23 @@ io.on("connection", async socket => {
 });
 
 
-io.on('connection', (socket) => {
-    console.log('A client has connected!');
+// io.on('connection', (socket) => {
+//     console.log('A client has connected!');
 
-    // Send a welcome message to the client
-    socket.emit('Message', "Hi Client. How is it going?");
+//     // Send a welcome message to the client
+//     socket.emit('Message', "Hi Client. How is it going?");
 
-    // Handle addToCart event
-    socket.on('addToCart', async data => {
-        try {
-            const { productId, title, quantity } = data;
-            await CartManager.addToCart(/* cartId */ productId, title, quantity);
-            // Send acknowledgment back to the client if needed
-            socket.emit('addedToCart', { productId, title, quantity });
-        } catch (error) {
-            console.error('Error adding to cart:', error);
-            // Handle error if needed
-        }
-    });
-});
+//     // Handle addToCart event
+//     socket.on('addToCart', async data => {
+//         try {
+//             const { productId, title, quantity } = data;
+//             await CartManager.addToCart(/* cartId */ productId, title, quantity);
+//             // Send acknowledgment back to the client if needed
+//             socket.emit('addedToCart', { productId, title, quantity });
+//         } catch (error) {
+//             console.error('Error adding to cart:', error);
+//             // Handle error if needed
+//         }
+//     });
+// });
 

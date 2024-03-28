@@ -18,8 +18,8 @@ const initializePassport = () => {
 
         try {
             //Checking if the register exists with that email
-            let user = await UserModel.findOne({email});
-            if(user) return done(null, false);
+            let user = await UserModel.findOne({email: email});
+            if(user) return done(null, false,  { message: "Email already exists!" });
             //If it doesn't exist, create a new one
             let newUser = {
                 full_name,
@@ -31,6 +31,7 @@ const initializePassport = () => {
             //If it works, return the result
             return done(null, result);
         } catch (error) {
+            console.error("Error registering user:", error);
             return done(error);
         }
     }))
@@ -41,7 +42,7 @@ const initializePassport = () => {
     }, async (email, password, done) => {
         try {
             //Check if the user exists with the email
-            const user = await UserModel.findOne({email});
+            const user = await UserModel.findOne({email: email});
             if(!user) {
                 console.log("This user does not exist");
                 return done(null, false);
