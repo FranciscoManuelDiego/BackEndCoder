@@ -24,9 +24,9 @@ const initializePassport = () => {
             let newUser = {
                 full_name,
                 email,
+                username,
                 password: createHash(password)
             }
-
             let result = await UserModel.create(newUser);
             //If it works, return the result
             return done(null, result);
