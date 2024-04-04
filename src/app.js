@@ -7,6 +7,7 @@ const productsRoutes = require("./routes/productsRoutes.js");
 const cartRoutes = require("./routes/cartRoutes.js");
 const usersRoutes = require("./routes/usersRoutes.js")
 const viewsRoutes = require("./routes/viewsRoutes.js");
+const sessionRoutes = require("./routes/sessionRoutes.js") ;
 const Msg = require("./models/MongoModels/Chats"); 
 const socket = require("socket.io")
 const dotenv = require("dotenv")
@@ -65,14 +66,10 @@ app.use(passport.session());
 // Consuming Routes
 app.use("/api/products", productsRoutes)
 app.use("/api/users", usersRoutes)
+app.use("/", sessionRoutes);
 app.use("/api/carts", cartRoutes)
 app.use("/", viewsRoutes)
 
-app.post("/register", passport.authenticate("register", {
-    successRedirect: "/profile",
-    failureRedirect: "/register",
-    failureFlash: true // Enable flash messages
-}));
 // Creating an instance of the port
 const httpServer = app.listen(PORT , 
     ()=>console.log(`Server running on port: ${PORT}🏃`))

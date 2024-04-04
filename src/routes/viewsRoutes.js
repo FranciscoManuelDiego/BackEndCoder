@@ -87,10 +87,7 @@ router.get("/login", (req, res) => {
 
 // Profile view
 router.get("/profile", (req, res) => {
-    if (!req.session.login) {
-        return res.redirect("/login");
-    }
-    res.render("profile", { user: req.session.user });
-});
+    res.render("profile");
+})
 
 module.exports = router;

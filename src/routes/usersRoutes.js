@@ -64,7 +64,6 @@ router.post("/", passport.authenticate("register", {failureRedirect: "/failedreg
 
     req.session.user = {
         full_name: req.user.full_name,
-        age: req.user.age,
         email:req.user.email
     };
 
