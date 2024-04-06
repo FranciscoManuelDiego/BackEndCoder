@@ -85,9 +85,4 @@ router.get("/login", (req, res) => {
     res.render("login");
 });
 
-// Profile view
-router.get("/profile", (req, res) => {
-    res.render("profile");
-})
-
 module.exports = router;

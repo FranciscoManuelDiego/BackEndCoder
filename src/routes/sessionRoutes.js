@@ -4,13 +4,14 @@ const passport = require("passport");
 
 // Register with passport
 router.post("/register", passport.authenticate("register", {
-    successRedirect: "/",
+    successRedirect: "/login",
     failureRedirect: "/register",
 }));
 
 // Login route with passport
 router.post("/login", passport.authenticate("login", {
-    failureRedirect: "/api/sessions/faillogin",
+    successRedirect: "/profile",
+    failureRedirect: "/login",
     failureFlash: true // Enable flash messages (optional)
   }), async (req, res) => {
     if (!req.user) {
@@ -24,11 +25,8 @@ router.post("/login", passport.authenticate("login", {
   
     req.session.login = true;
   
-    res.redirect("/profile");
+    res.redirect("/");
   });
-router.get("/faillogin", async (req, res) => {
-    res.send({error: "Login failed :("});
-})
 
 //Logout
 
@@ -38,5 +36,16 @@ router.get("/logout", (req, res) => {
     }
     res.redirect("/login");
 })
+
+// Profile route
+router.get("/profile", (req, res) => {
+  // Check if user is logged in
+  if (!req.session.login || !req.session.user) {
+      return res.redirect("/login");
+  }
+
+  // Pass user data to the Handlebars template
+  res.render("profile", { user: req.session.user });
+});
 
 module.exports = router;

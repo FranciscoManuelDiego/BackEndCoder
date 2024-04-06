@@ -58,22 +58,5 @@ router.delete("/:pid" , async(req, res) => {
     }
 })
 
-// Creating the user with Passport
-router.post("/", passport.authenticate("register", {failureRedirect: "/failedregister"}), async (req, res) => {
-    if(!req.user) return res.status(400).send({status:"error"});
-
-    req.session.user = {
-        full_name: req.user.full_name,
-        email:req.user.email
-    };
-
-    req.session.login = true;
-
-    res.redirect("/profile");
-})
-
-router.get("/failedregister", (req, res) => {
-    res.send({error: "Failed register :("});
-})
 
 module.exports = router; 
